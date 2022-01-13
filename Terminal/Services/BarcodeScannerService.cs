@@ -25,7 +25,10 @@ namespace CoCoME.Terminal.Services
         public IObservable<string> ListenToBarcodes()
         {
             return Observable.FromEventPattern<BarcodeScannedEventArgs>(h => _viewModel.Scanned += h, h => _viewModel.Scanned -= h)
-                .Select(scanEvent => scanEvent.EventArgs.Barcode);
+                .Select(scanEvent =>
+                {
+                    return scanEvent.EventArgs.Barcode;
+                });
         }
     }
 }

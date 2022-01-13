@@ -13,6 +13,7 @@ using System.Linq;
 using Tecan.Sila2;
 using Tecan.Sila2.Client;
 using Tecan.Sila2.Server;
+using Terminal;
 
 namespace CoCoME.Terminal.BarcodeScannerService
 {
@@ -77,7 +78,7 @@ namespace CoCoME.Terminal.BarcodeScannerService
         /// <returns>The command response wrapped in a data transfer object</returns>
         protected virtual Tecan.Sila2.IIntermediateObservableCommand<string> ListenToBarcodes(ListenToBarcodesRequestDto request)
         {
-            return new ObservableRxCommand<string>(_implementation.ListenToBarcodes());
+            return new FixedObservableRxCommand<string>(_implementation.ListenToBarcodes());
         }
         
         ///  <summary>
