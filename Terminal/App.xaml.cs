@@ -8,6 +8,7 @@ using System.Windows;
 using Tecan.Sila2.Server;
 using CoCoME.Terminal.ViewModels;
 using Common.Logging;
+using System.ComponentModel;
 
 namespace CoCoME.Terminal
 {
@@ -21,9 +22,16 @@ namespace CoCoME.Terminal
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+            DelegateCommand.ExceptionHandler = ex => MessageBox.Show(ex.Message, "An error occured", MessageBoxButton.OK, MessageBoxImage.Error);
+            ViewModelBase.PropertyChangedInvoker = DispatchPropertyChangedInvoker(ViewModelBase.PropertyChangedInvoker);
             LogManager.Adapter = new Common.Logging.Simple.DebugLoggerFactoryAdapter();
             _bootstrapper = new Bootstrapper();
             Bootstrapper.Start(e.Args, _bootstrapper);
+        }
+
+        private Action<ViewModelBase, PropertyChangedEventArgs> DispatchPropertyChangedInvoker(Action<ViewModelBase, PropertyChangedEventArgs> propertyChangedInvoker)
+        {
+            return (vm, e) => Dispatcher.Invoke(() => propertyChangedInvoker?.Invoke(vm, e));
         }
 
         protected override void OnActivated(EventArgs e)

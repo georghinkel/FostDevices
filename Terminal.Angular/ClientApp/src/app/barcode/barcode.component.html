@@ -1,0 +1,7 @@
+<h3>Barcode scanner</h3>
+
+<button (click)="sendBarcode('Chocolate')">Chocolate</button>
+<button (click)="sendBarcode('Cookies')">Cookies</button>
+<button (click)="sendBarcode('Chips')">Chips</button>
+
+<input type="text" [(ngModel)]="barcode"><button (click)="sendCustomBarcode()">Custom</button>

@@ -20,7 +20,7 @@ var executionManagerFactory = new ExecutionManagerFactory(Enumerable.Empty<IClie
 var servers = discovery.GetServers(TimeSpan.FromSeconds(10), n => n.NetworkInterfaceType == NetworkInterfaceType.Loopback);
 
 var terminalServer = servers.First(s => s.Info.Type == "Terminal");
-var bankServer = servers.FirstOrDefault(s => s.Info.Type == "BankServer");
+var bankServer = servers.First(s => s.Info.Type == "BankServer");
 
 var terminalServerExecutionManager = executionManagerFactory.CreateExecutionManager(terminalServer);
 
