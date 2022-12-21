@@ -1,4 +1,5 @@
 ﻿using CoCoME.Terminal.ViewModels;
+using CoCoME.Terminal.ViewModels.Contracts;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,16 +9,17 @@ namespace Terminal.Angular.Controllers
     [ApiController]
     public class CashboxController : ControllerBase
     {
-        private readonly CashboxViewModel _cashBoxViewModel;
+        private readonly ICashboxViewModel _cashBoxViewModel;
 
-        public CashboxController(CashboxViewModel cashBoxViewModel)
+        public CashboxController(ICashboxViewModel cashBoxViewModel)
         {
             _cashBoxViewModel = cashBoxViewModel;
         }
 
         [HttpPost]
-        public void PressButton( [FromBody] string button)
+        public async Task PressButton()
         {
+            var button = await (new StreamReader(Request.Body)).ReadToEndAsync();
             _cashBoxViewModel.PressButton(button);
         }
     }

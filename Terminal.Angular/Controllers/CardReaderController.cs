@@ -8,16 +8,17 @@ namespace Terminal.Angular.Controllers
     [ApiController]
     public class CardReaderController : ControllerBase
     {
-        private readonly CardReaderViewModel _cardReaderViewModel;
+        private readonly ICardReaderViewModel _cardReaderViewModel;
 
-        public CardReaderController(CardReaderViewModel cardReaderViewModel)
+        public CardReaderController(ICardReaderViewModel cardReaderViewModel)
         {
             _cardReaderViewModel = cardReaderViewModel;
         }
 
         [HttpPost]
-        public void SelectCard([FromBody] string cardId)
+        public async Task SelectCard()
         {
+            var cardId = await (new StreamReader(Request.Body)).ReadToEndAsync();
             _cardReaderViewModel.Authorize(cardId);
         }
 

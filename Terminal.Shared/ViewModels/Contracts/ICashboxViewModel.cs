@@ -9,5 +9,7 @@ namespace CoCoME.Terminal.ViewModels.Contracts
     public interface ICashboxViewModel
     {
         event EventHandler<CashboxButtonEventArgs> ButtonPressed;
+
+        void PressButton(string button);
     }
 }

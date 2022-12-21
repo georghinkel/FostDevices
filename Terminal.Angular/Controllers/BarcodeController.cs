@@ -8,16 +8,17 @@ namespace Terminal.Angular.Controllers
     [ApiController]
     public class BarcodeController : ControllerBase
     {
-        private readonly BarcodeScannerViewModel _scannerViewModel;
+        private readonly IBarcodeScannerViewModel _scannerViewModel;
 
-        public BarcodeController(BarcodeScannerViewModel scannerViewModel)
+        public BarcodeController(IBarcodeScannerViewModel scannerViewModel)
         {
             _scannerViewModel = scannerViewModel;
         }
 
         [HttpPost]
-        public void SendBarcode([FromBody] string barcode)
+        public async Task SendBarcode()
         {
+            var barcode = await (new StreamReader(Request.Body)).ReadToEndAsync();
             _scannerViewModel.Scan(barcode);
         }
     }

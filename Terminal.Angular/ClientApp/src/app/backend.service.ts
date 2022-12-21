@@ -9,10 +9,12 @@ export class BackendService {
   constructor(private http : HttpClient, @Inject('BASE_URL') private baseUri : string) {}
 
   post(endpoint : string, data : any) {
-    this.http.post(this.baseUri + endpoint, data);
+    this.http.post(this.baseUri + "api/" + endpoint, data)
+      .subscribe(() => console.log('success'));
   }
 
   cancel(endpoint : string) {
-    this.http.delete(this.baseUri + endpoint);
+    this.http.delete(this.baseUri + "api/" + endpoint)
+      .subscribe(() => console.log('successfully deleted'));
   }
 }

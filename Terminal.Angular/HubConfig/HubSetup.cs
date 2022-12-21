@@ -1,4 +1,5 @@
 ﻿using CoCoME.Terminal.ViewModels;
+using CoCoME.Terminal.ViewModels.Contracts;
 using Microsoft.AspNetCore.SignalR;
 using System.ComponentModel;
 using System.Reflection;
@@ -8,11 +9,11 @@ namespace Terminal.Angular.HubConfig
     public class HubSetup : IIntegrationComponent
     {
         private readonly IHubContext<TerminalHub> _hubContext;
-        private readonly CardReaderViewModel _cardReader;
-        private readonly DisplayViewModel _display;
-        private readonly PrinterViewModel _printer;
+        private readonly ICardReaderViewModel _cardReader;
+        private readonly IDisplayViewModel _display;
+        private readonly IPrinterViewModel _printer;
 
-        public HubSetup(IHubContext<TerminalHub> hubContext, CardReaderViewModel cardReader, DisplayViewModel display, PrinterViewModel printer)
+        public HubSetup(IHubContext<TerminalHub> hubContext, ICardReaderViewModel cardReader, IDisplayViewModel display, IPrinterViewModel printer)
         {
             _hubContext = hubContext;
             _cardReader = cardReader;
@@ -22,9 +23,18 @@ namespace Terminal.Angular.HubConfig
 
         public void Start()
         {
-            _cardReader.PropertyChanged += CardReaderPropertyChanged;
-            _display.PropertyChanged += DisplayPropertyChanged;
-            _printer.PropertyChanged += PrinterPropertyChanged;
+            if (_cardReader is INotifyPropertyChanged notifyCardReader)
+            {
+                notifyCardReader.PropertyChanged += CardReaderPropertyChanged;
+            }
+            if (_display is INotifyPropertyChanged notifyDisplay)
+            {
+                notifyDisplay.PropertyChanged += DisplayPropertyChanged;
+            }
+            if (_printer is INotifyPropertyChanged notifyPrinter)
+            {
+                notifyPrinter.PropertyChanged += PrinterPropertyChanged;
+            }
         }
 
         private void PrinterPropertyChanged(object? sender, PropertyChangedEventArgs e)

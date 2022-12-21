@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Tecan.Sila2.Client" Version="4.0.2" />
+    <PackageReference Include="Tecan.Sila2.Client.NetCore" Version="4.3.0" />
   </ItemGroup>
 
 </Project>

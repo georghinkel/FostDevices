@@ -5,7 +5,7 @@ using Terminal.Angular;
 using Terminal.Angular.HubConfig;
 
 
-var serverInfo = ServerConfigReader.ReadServerStartInformation();
+var serverInfo = new ServerStartInformation(new ServerInformation("Terminal", "", "", "0.1"), 7029);
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -18,13 +18,18 @@ builder.Host.UseDryIoc(container =>
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddSignalR();
-builder.Services.AddSila2();
+builder.Services.AddSila2(serverInfo);
 
-builder.WebHost.ConfigureKestrelForSila2(serverInfo, options =>
+builder.Services.AddCors(options =>
 {
-    // you can also set this to Http1AndHttp2 but then Http2 only works with Https
-    options.Protocols = HttpProtocols.Http1AndHttp2;
+    options.AddPolicy("ProxyCorsPolicy", builder => builder
+        .WithOrigins("https://localhost:44494")
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .AllowCredentials());
 });
+
+builder.Services.AddTransient<IIntegrationComponent, HubSetup>();
 
 var app = builder.Build();
 
@@ -33,6 +38,10 @@ if (!app.Environment.IsDevelopment())
 {
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
+}
+else
+{
+    app.UseCors("ProxyCorsPolicy");
 }
 
 app.UseHttpsRedirection();
@@ -45,7 +54,7 @@ app.MapControllerRoute(
     pattern: "{controller}/{action=Index}/{id?}");
 app.MapHub<TerminalHub>("/hub");
 
-app.MapFallbackToFile("index.html"); ;
+app.MapFallbackToFile("index.html");
 
 foreach (var service in app.Services.GetServices<IIntegrationComponent>())
 {
