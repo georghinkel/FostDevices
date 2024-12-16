@@ -5,7 +5,7 @@ using Terminal.Angular;
 using Terminal.Angular.HubConfig;
 
 
-var serverInfo = new ServerStartInformation(new ServerInformation("Terminal", "", "", "0.1"), 7029);
+var serverInfo = new ServerStartInformation(new ServerInformation("Terminal", "", "", "0.1"), 7029, "127.0.0.1", Guid.NewGuid(), "Terminal");
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
