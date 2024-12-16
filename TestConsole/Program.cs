@@ -17,7 +17,7 @@ var connector = new ServerConnector(new DiscoveryExecutionManager());
 var discovery = new ServerDiscovery(connector);
 var executionManagerFactory = new ExecutionManagerFactory(Enumerable.Empty<IClientRequestInterceptor>());
 
-var servers = discovery.GetServers(TimeSpan.FromSeconds(10), n => n.NetworkInterfaceType == NetworkInterfaceType.Loopback);
+var servers = discovery.GetServers(TimeSpan.FromSeconds(10), n => true);
 
 var terminalServer = servers.First(s => s.Info.Type == "Terminal");
 var bankServer = servers.First(s => s.Info.Type == "BankServer");
